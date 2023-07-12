@@ -7,16 +7,16 @@ class Bankaccount:
     def withdraw(self, num):
         if self.balance - num >= 0:
             self.balance -= num
-            print(f"{self.name} has ${self.balance} in account.")
+            return f"{self.name} has ${self.balance} in account."
         else:
-            print("Invalid withdraw")
+            return "Invalid withdraw"
 
     def deposit(self, num):
         self.balance += num
-        print(f"{self.name} has ${self.balance} in account.")
+        return f"{self.name} has ${self.balance} in account."
 
     def current_balance(self):
-        print(f"{self.name} has ${self.balance} in account.")
+        return f"{self.name} has ${self.balance} in account."
 
 
 if __name__ == "__main__":
