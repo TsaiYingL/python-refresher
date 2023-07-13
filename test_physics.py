@@ -12,6 +12,16 @@ class TestPhysics(unittest.TestCase):
             physics.calculate_buoyancy(30), f"the buoyancy is {10*1000*9.81} Newtons"
         )
 
+    def test_will_it_float(self):
+        self.assertEqual(physics.will_it_float(100, 1), True)
+        self.assertEqual(physics.will_it_float(1, 1001), False)
+        self.assertNotEqual(physics.will_it_float(1, 1000), False)
+
+    def test_calculate_pressure(self):
+        self.assertEqual(
+            physics.calculate_pressure(100), f"the pressure is {1000*100*9.81} Pascals"
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
