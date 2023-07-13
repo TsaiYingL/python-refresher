@@ -21,6 +21,9 @@ class TestPhysics(unittest.TestCase):
         self.assertEqual(
             physics.calculate_pressure(100), f"the pressure is {1000*100*9.81} Pascals"
         )
+        self.assertNotEqual(
+            physics.calculate_buoyancy(100), f"the pressure is {1000*90*9.81} Pascals"
+        )
 
 
 if __name__ == "__main__":
