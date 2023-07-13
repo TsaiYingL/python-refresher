@@ -12,6 +12,9 @@ class Test_bank(unittest.TestCase):
         self.assertEqual(
             bank.Bankaccount.deposit(acc, 100), "Tsai has $200 in account."
         )
+        self.assertEqual(
+            bank.Bankaccount.current_balance(acc, 100), "Tsai has $200 in account."
+        )
 
 
 if __name__ == "__main__":
