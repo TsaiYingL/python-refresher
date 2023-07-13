@@ -6,6 +6,8 @@ class TestPhysics(unittest.TestCase):
     def test_buoyancy(self):
         self.assertEqual(physics.calculate_buoyancy(10), 10 * 1000 * 9.81)
         self.assertNotEqual(physics.calculate_buoyancy(30), 10 * 1000 * 9.81)
+        self.assertEqual(physics.calculate_buoyancy(-10), "error")
+        self.assertNotEqual(physics.calculate_buoyancy(-10), -10 * 1000 * 9.81)
 
     def test_will_it_float(self):
         self.assertEqual(physics.will_it_float(100, 1), True)
