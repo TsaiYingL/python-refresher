@@ -21,11 +21,15 @@ def will_it_float(v, mass):
 
 # calculate and return the pressure
 def calculate_pressure(depth):
-    return f"the pressure is {density_fluid*depth*g} Pascals"
+    surface_pressure = 101324
+    return f"the pressure is {density_fluid*depth*g+surface_pressure} Pascals"
 
 
 # next time can return th =e value instead of a string
 # don't need to make a class sine the question specified to make a function
 # we use classes when we have multiple objects
-# the volume and density cannot be less than 0
+# the volume, depth, and density cannot be less than 0
 # command d can select the same thing that you initially selected
+# might not need to set v, mass, and depth to 0 st the start
+# elif: only use it when the cases are related to each other
+# when returning the value, define the equation so we know what it is when debugging
