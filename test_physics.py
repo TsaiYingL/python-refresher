@@ -28,3 +28,5 @@ class TestPhysics(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+# can use self.assertraise to check
