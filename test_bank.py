@@ -13,7 +13,7 @@ class Test_bank(unittest.TestCase):
             bank.Bankaccount.deposit(acc, 100), "Tsai has $200 in account."
         )
         self.assertEqual(
-            bank.Bankaccount.current_balance(acc, 100), "Tsai has $200 in account."
+            bank.Bankaccount.current_balance(acc), "Tsai has $200 in account."
         )
 
 
