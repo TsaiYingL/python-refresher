@@ -59,8 +59,14 @@ class TestPhysics(unittest.TestCase):
             physics.calculate_auv_angular_acceleration(10, np.pi / 2, 1, 1), 1
         )
 
-    def test_calculate_auv2_acceleration(T: np.ndarray, alpha: int or float, mass=100):
-        pass
+    def test_calculate_auv2_acceleration(self):
+        self.assertEqual(
+            physics.calculate_auv2_acceleration(
+                np.array([10, 10, 10, 10]),
+                np.pi / 2,
+            ),
+            0,
+        )
 
 
 if __name__ == "__main__":

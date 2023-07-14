@@ -93,8 +93,17 @@ def calculate_auv_angular_acceleration(
         return angular_acceleration
 
 
-def calculate_auv2_acceleration(T: np.ndarray, alpha: int or float, mass=100):
-    pass
+def calculate_auv2_acceleration(
+    T: np.ndarray, alpha: int or float, theta: int or float, mass=100
+):
+    x_axis = np.array([np.cos(alpha), np.cos(alpha), -np.cos(alpha), -np.cos(alpha)])
+    y_axis = np.array
+    acceleration_x = 0
+    acceleration_y = 0
+
+    acceleration_x = acceleration_x / mass
+    acceleration_y = acceleration_y / mass
+    return (acceleration_x, acceleration_y)
 
 
 # √√ next time can return the value instead of a string
