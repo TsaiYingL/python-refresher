@@ -78,9 +78,9 @@ def calculate_auv_acceleration(
     F_magnitude, F_angle, mass=100, volume=0.1, thruster_distance=0.5
 ):
     if thruster_distance >= 0 and mass >= 0 and volume >= 0:
-        acceleration_x = F_magnitude * np.cos(F_angle) / mass
-        acceleration_y = F_magnitude * np.sin(F_angle) / mass
-        return acceleration_x and acceleration_y
+        acceleration_x = round(F_magnitude * np.cos(F_angle) / mass, 10)
+        acceleration_y = round(F_magnitude * np.sin(F_angle) / mass, 10)
+        return (acceleration_x, acceleration_y)
 
 
 # calculate the angular acceleration of AUV
@@ -88,9 +88,13 @@ def calculate_auv_angular_acceleration(
     F_magnitude, F_angle, inertia=1, thruster_distance=0.5
 ):
     if thruster_distance >= 0 and inertia >= 0:
-        torque = F_magnitude * F_angle
-        angular_acceleration = torque / (inertia * thruster_distance)
+        torque = F_magnitude * np.sin(F_angle) * thruster_distance
+        angular_acceleration = round(torque / inertia, 10)
         return angular_acceleration
+
+
+def calculate_auv2_acceleration(T: np.ndarray, alpha: int or float, mass=100):
+    pass
 
 
 # √√ next time can return the value instead of a string
