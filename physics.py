@@ -68,6 +68,8 @@ def calculate_moment_of_inertia(m,r):
     else:
         return "error"
 
+def calculate_auv_acceleration(F_magnitude, F_angle, mass = 100, volume = 0.1, thruster_distance = 0.5):
+    if thruster_distance>=0 and mass>=0 and :
 
 
 
