@@ -52,7 +52,12 @@ class TestPhysics(unittest.TestCase):
         self.assertNotEqual(physics.calculate_auv_acceleration(10, np.pi / 2), 0.1)
 
     def test_calculate_auv_angular_acceleration(self):
-        pass
+        self.assertEqual(
+            physics.calculate_auv_angular_acceleration(10, np.pi / 2, 1, 1), 10
+        )
+        self.assertNotEqual(
+            physics.calculate_auv_angular_acceleration(10, np.pi / 2, 1, 1), 1
+        )
 
     def test_calculate_auv2_acceleration(T: np.ndarray, alpha: int or float, mass=100):
         pass
