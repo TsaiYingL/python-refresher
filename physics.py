@@ -3,6 +3,7 @@ in water. It also tells us if the object will float on water"""
 
 # adding values
 import numpy as np
+
 density_fluid = 1000
 g = 9.81
 
@@ -38,39 +39,58 @@ def calculate_pressure(depth):
 
 
 # calculates the acceleration of an object
-def calculate_acceleration(F, m):
+def calculate_acceleration(F: int or float, m: int or float):
     if m >= 0:
         acceleration = F / m
         return acceleration
     else:
         return "error"
 
+
 # find angular acceleration
 def calculate_angular_acceleration(tau, I):
-    if I>=0:
-        angular_acceleration = tau/I
+    if I >= 0:
+        angular_acceleration = tau / I
         return angular_acceleration
     else:
         return "error"
 
+
 def calculate_torque(F_magnitude, F_direction, r):
-    if r>0:
-        F_direction *= np.pi/180
-        torque = r*F_magnitude*np.sin(F_direction)
+    if r > 0:
+        F_direction *= np.pi / 180
+        torque = r * F_magnitude * np.sin(F_direction)
         return torque
     else:
         return "error"
-    
-def calculate_moment_of_inertia(m,r):
-    if m>=0 and r>0:
-        moment_of_inertia = m*(r**2)
+
+
+def calculate_moment_of_inertia(m, r):
+    if m >= 0 and r > 0:
+        moment_of_inertia = m * (r**2)
         return moment_of_inertia
     else:
         return "error"
 
-def calculate_auv_acceleration(F_magnitude, F_angle, mass = 100, volume = 0.1, thruster_distance = 0.5):
-    if thruster_distance>=0 and mass>=0 and :
 
+# calculate the acceleration of AUV
+def calculate_auv_acceleration(
+    F_magnitude, F_angle, mass=100, volume=0.1, thruster_distance=0.5
+):
+    if thruster_distance >= 0 and mass >= 0 and volume >= 0:
+        acceleration_x = F_magnitude * np.cos(F_angle) / mass
+        acceleration_y = F_magnitude * np.sin(F_angle) / mass
+        return acceleration_x and acceleration_y
+
+
+# calculate the angular acceleration of AUV
+def calculate_auv_angular_acceleration(
+    F_magnitude, F_angle, inertia=1, thruster_distance=0.5
+):
+    if thruster_distance >= 0 and inertia >= 0:
+        torque = F_magnitude * F_angle
+        angular_acceleration = torque / (inertia * thruster_distance)
+        return angular_acceleration
 
 
 # √√ next time can return the value instead of a string
