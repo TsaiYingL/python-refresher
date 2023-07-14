@@ -36,6 +36,15 @@ def calculate_pressure(depth):
         return "error"
 
 
+# calculates the acceleration of an object
+def calculate_acceleration(F, m):
+    if m >= 0:
+        acceleration = F / m
+        return acceleration
+    else:
+        return "error"
+
+
 # √√ next time can return the value instead of a string
 # √√ don't need to make a class sine the question specified to make a function
 # √√ we use classes when we have multiple objects

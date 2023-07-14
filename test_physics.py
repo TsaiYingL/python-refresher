@@ -18,6 +18,11 @@ class TestPhysics(unittest.TestCase):
         self.assertEqual(physics.calculate_pressure(100), 1000 * 100 * 9.81 + 101324)
         self.assertNotEqual(physics.calculate_buoyancy(100), 1000 * 90 * 9.81 + 101324)
 
+    def test_calculate_acceleration(self):
+        self.assertEqual(physics.calculate_acceleration(100, 10), 10)
+        self.assertEqual(physics.calculate_acceleration(-100, -10), "error")
+        self.assertNotEqual(physics.calculate_acceleration(-100, -10), 10)
+
 
 if __name__ == "__main__":
     unittest.main()
