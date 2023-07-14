@@ -1,5 +1,6 @@
 import unittest
 import physics
+import numpy as np
 
 
 class TestPhysics(unittest.TestCase):
@@ -22,6 +23,24 @@ class TestPhysics(unittest.TestCase):
         self.assertEqual(physics.calculate_acceleration(100, 10), 10)
         self.assertEqual(physics.calculate_acceleration(-100, -10), "error")
         self.assertNotEqual(physics.calculate_acceleration(-100, -10), 10)
+
+    def test_calculate_angular_acceleration(self):
+        self.assertEqual(physics.calculate_angular_acceleration(100,10),10)
+        self.assertEqual(physics.calculate_angular_acceleration(100,-10),"error")
+        self.assertNotEqual(physics.calculate_angular_acceleration(100,-10),10)
+
+    def test_calculate_torque(self):
+        self.assertEqual(physics.calculate_torque(10,90,10),100*np.sin(np.pi/2))
+        self.assertEqual(physics.calculate_torque(30.555,90,10.555),10.555*30.555*np.sin(np.pi/2))
+        self.assertEqual(physics.calculate_torque(10,90,0),"error")
+        self.assertEqual(physics.calculate_torque(10.5,78,10),10.5*np.sin(78*np.pi/180)*10)
+    
+    def test_calculate_moment_of_inertia(self):
+        self.assertEqual(physics.calculate_moment_of_inertia(10.5,10.5),10.5**3)
+        self.assertEqual(physics.calculate_moment_of_inertia(0,10),0)
+        self.assertEqual(physics.calculate_moment_of_inertia(-1,10),"error")
+        self.assertEqual(physics.calculate_moment_of_inertia(10,0),"error")
+        self.assertNotEqual(physics.calculate_moment_of_inertia(-1,10),-10)
 
 
 if __name__ == "__main__":

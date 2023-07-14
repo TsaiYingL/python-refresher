@@ -2,6 +2,7 @@
 in water. It also tells us if the object will float on water"""
 
 # adding values
+import numpy as np
 density_fluid = 1000
 g = 9.81
 
@@ -43,6 +44,31 @@ def calculate_acceleration(F, m):
         return acceleration
     else:
         return "error"
+
+# find angular acceleration
+def calculate_angular_acceleration(tau, I):
+    if I>=0:
+        angular_acceleration = tau/I
+        return angular_acceleration
+    else:
+        return "error"
+
+def calculate_torque(F_magnitude, F_direction, r):
+    if r>0:
+        F_direction *= np.pi/180
+        torque = r*F_magnitude*np.sin(F_direction)
+        return torque
+    else:
+        return "error"
+    
+def calculate_moment_of_inertia(m,r):
+    if m>=0 and r>0:
+        moment_of_inertia = m*(r**2)
+        return moment_of_inertia
+    else:
+        return "error"
+
+
 
 
 # √√ next time can return the value instead of a string
