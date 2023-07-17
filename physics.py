@@ -113,13 +113,17 @@ def calculate_auv2_acceleration(
             axis=1,
         )
         acceleration = force / mass
-        return acceleration
+        acceleration_x = round(acceleration[0], 10)
+        acceleration_y = round(acceleration[1], 10)
+        return (acceleration_x, acceleration_y)
     else:
         return "error"
 
 
 # calculate the angular acceleration of the AUV (with 4 thrusters)
-def calculate_auv2_angular_acceleration(T: np.ndarray, alpha, L, l, inertia=100):
+def calculate_auv2_angular_acceleration(
+    T: np.ndarray, alpha, L: int or float, l: int or float, inertia=100
+):
     if T.shape == (4,) and inertia >= 0 and L >= 0 and l >= 0:
         trig = np.array(
             [

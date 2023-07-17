@@ -62,8 +62,21 @@ class TestPhysics(unittest.TestCase):
     def test_calculate_auv2_acceleration(self):
         self.assertEqual(
             physics.calculate_auv2_acceleration(
-                np.array([10, 10, 10, 10]),
-                np.pi / 2,
+                np.array([100, 100, 100, 100]), np.pi / 3, np.pi / 6
+            ),
+            (0, 0),
+        )
+        self.assertEqual(
+            physics.calculate_auv2_acceleration(
+                np.array([200, 200, 100, 100]), np.pi / 3, np.pi / 6
+            ),
+            (0.8660254038, 0.5),
+        )
+
+    def test_calculate_auv2_sngular_acceleeraion(self):
+        self.assertEqual(
+            physics.calculate_auv2_angular_acceleration(
+                np.array([100, 100, 100, 100]), np.pi / 3, 100, 50
             ),
             0,
         )
