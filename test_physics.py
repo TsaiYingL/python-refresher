@@ -72,6 +72,18 @@ class TestPhysics(unittest.TestCase):
             ),
             (0.8660254038, 0.5),
         )
+        self.assertEqual(
+            physics.calculate_auv2_acceleration(
+                np.array([200, 100, 100]), np.pi / 3, np.pi / 6
+            ),
+            "error",
+        )
+        self.assertNotEqual(
+            physics.calculate_auv2_acceleration(
+                np.array([200, 100, 100, 100]), np.pi / 3, np.pi / 6
+            ),
+            (0.8660254038, 0.5),
+        )
 
     def test_calculate_auv2_sngular_acceleeraion(self):
         self.assertEqual(
@@ -79,6 +91,15 @@ class TestPhysics(unittest.TestCase):
                 np.array([100, 100, 100, 100]), np.pi / 3, 100, 50
             ),
             0,
+        )
+        self.assertEqual(
+            physics.calculate_auv2_angular_acceleration(
+                np.array([200, 200, 100, 100]), np.pi / 3, 100, 50
+            ),
+            200 * (100 * (np.sin(np.pi / 3)) + 50 * (np.cos(np.pi / 3)))
+            + 200 * (100 * (np.sin(np.pi / 3)) + 50 * (-np.cos(np.pi / 3)))
+            + 100 * (100 * (-np.sin(np.pi / 3)) + 50 * (-np.cos(np.pi / 3)))
+            + 100 * (100 * (-np.sin(np.pi / 3)) + 50 * (np.cos(np.pi / 3))),
         )
 
 

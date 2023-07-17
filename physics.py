@@ -47,6 +47,9 @@ def calculate_acceleration(F: int or float, m: int or float):
         return "error"
 
 
+# will return error if m = 0
+
+
 # calculates the angular acceleration
 def calculate_angular_acceleration(tau, I):
     if I >= 0:
@@ -59,30 +62,42 @@ def calculate_angular_acceleration(tau, I):
 # calculates the torque
 def calculate_torque(F_magnitude, F_direction, r):
     if r > 0:
-        F_direction *= np.pi / 180
-        torque = r * F_magnitude * np.sin(F_direction)
+        torque = r * F_magnitude * np.sin(np.deg2rad(F_direction))
         return torque
     else:
         return "error"
 
 
+# np.deg2rad changes degrees to rads
+
+
 # calculates the moment of inertia
 def calculate_moment_of_inertia(m, r):
     if m >= 0 and r > 0:
-        moment_of_inertia = m * (r**2)
+        moment_of_inertia = m * np.power(r, 2)
         return moment_of_inertia
     else:
-        return "error"
+        raise ValueError()
 
 
 # calculate the acceleration of AUV (with 1 thruster)
 def calculate_auv_acceleration(
-    F_magnitude, F_angle, mass=100, volume=0.1, thruster_distance=0.5
+    F_magnitude,
+    F_angle,
+    mass: float = 100,
+    volume: float = 0.1,
+    thruster_distance: float = 0.5,
 ):
     if thruster_distance >= 0 and mass >= 0 and volume >= 0:
-        acceleration_x = round(F_magnitude * np.cos(F_angle) / mass, 10)
-        acceleration_y = round(F_magnitude * np.sin(F_angle) / mass, 10)
-        return (acceleration_x, acceleration_y)
+        force = np.array([np.cos(F_angle), np.sin(F_angle)]) * F_magnitude
+        acceleration = force / mass
+        # acceleration_x = F_magnitude * np.cos(F_angle) / mass
+        # acceleration_y = F_magnitude * np.sin(F_angle) / mass
+        # return (acceleration_x, acceleration_y)
+        return acceleration
+
+
+# better not to round since it will affect the precision***
 
 
 # calculate the angular acceleration of AUV (with 1 thruster)
@@ -91,8 +106,11 @@ def calculate_auv_angular_acceleration(
 ):
     if thruster_distance >= 0 and inertia >= 0:
         torque = F_magnitude * np.sin(F_angle) * thruster_distance
-        angular_acceleration = round(torque / inertia, 10)
+        angular_acceleration = torque / inertia
         return angular_acceleration
+
+
+# use the function that is being defined before
 
 
 # calculate the acceleration of AUV (with 4 thrusters)
@@ -120,6 +138,11 @@ def calculate_auv2_acceleration(
         return "error"
 
 
+# try to use np.matmul
+# should ask for a 4x1 array, not 1x4 shape(1,4)
+# raise ValueError, not return
+
+
 # calculate the angular acceleration of the AUV (with 4 thrusters)
 def calculate_auv2_angular_acceleration(
     T: np.ndarray, alpha, L: int or float, l: int or float, inertia=100
@@ -134,11 +157,28 @@ def calculate_auv2_angular_acceleration(
             ]
         )
         torque = np.sum(trig * T)
-        alpha = torque / inertia
+        alpha = round(torque / inertia, 10)
         return alpha
     else:
         return "error"
 
+
+# np.array([1,-1,1,-1]) is a 4x1 matrix; np.array([1,-1,1,-1]).T (transpose) is a 1x4 matrix
+
+
+if __name__ == "__main__":
+    print(
+        calculate_auv2_angular_acceleration(
+            np.array([200, 200, 100, 100]), np.pi / 3, 100, 50
+        )
+    )
+    print(200 * (100 * (np.sin(np.pi / 3)) + 50 * (np.cos(np.pi / 3))))
+    print(200 * (100 * (np.sin(np.pi / 3)) - 50 * (np.cos(np.pi / 3))))
+    print(100 * (-100 * (np.sin(np.pi / 3)) - 50 * (np.cos(np.pi / 3))))
+    print(100 * (-100 * (np.sin(np.pi / 3)) + 50 * (np.cos(np.pi / 3))))
+    print(np.cos(np.pi / 3))
+
+    print(calculate_auv_acceleration(10, np.pi / 2), (0, 0.1))
 
 # √√ next time can return the value instead of a string
 # √√ don't need to make a class sine the question specified to make a function
