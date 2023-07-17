@@ -99,39 +99,41 @@ def calculate_auv_angular_acceleration(
 def calculate_auv2_acceleration(
     T: np.ndarray, alpha: int or float, theta: int or float, mass=100
 ):
-    trig = np.array(
-        [
-            [np.cos(alpha), np.cos(alpha), -np.cos(alpha), -np.cos(alpha)],
-            [np.sin(alpha), -np.sin(alpha), -np.sin(alpha), np.sin(alpha)],
-        ]
-    )
-    robot_force = np.sum(trig * T, axis=1)
-    force = np.sum(
-        np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
-        * robot_force,
-        axis=1,
-    )
-    acceleration = force / mass
-    return acceleration
+    if T.shape == (4,) and mass >= 0:
+        trig = np.array(
+            [
+                [np.cos(alpha), np.cos(alpha), -np.cos(alpha), -np.cos(alpha)],
+                [np.sin(alpha), -np.sin(alpha), -np.sin(alpha), np.sin(alpha)],
+            ]
+        )
+        robot_force = np.sum(trig * T, axis=1)
+        force = np.sum(
+            np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
+            * robot_force,
+            axis=1,
+        )
+        acceleration = force / mass
+        return acceleration
+    else:
+        return "error"
 
 
 # calculate the angular acceleration of the AUV (with 4 thrusters)
 def calculate_auv2_angular_acceleration(T: np.ndarray, alpha, L, l, inertia=100):
-    trig = np.array(
-        [
-            l * np.cos(alpha) + L * np.sin(alpha),
-            l * np.cos(alpha) - L * np.sin(alpha),
-            -l * np.cos(alpha) - L * np.sin(alpha),
-            -l * np.cos(alpha) + L * np.sin(alpha),
-        ]
-    )
-    torque = np.sum(trig * T)
-    alpha = torque / inertia
-    return alpha
-
-    acceleration_x = acceleration_x / mass
-    acceleration_y = acceleration_y / mass
-    return (acceleration_x, acceleration_y)
+    if T.shape == (4,) and inertia >= 0 and L >= 0 and l >= 0:
+        trig = np.array(
+            [
+                l * np.cos(alpha) + L * np.sin(alpha),
+                l * np.cos(alpha) - L * np.sin(alpha),
+                -l * np.cos(alpha) - L * np.sin(alpha),
+                -l * np.cos(alpha) + L * np.sin(alpha),
+            ]
+        )
+        torque = np.sum(trig * T)
+        alpha = torque / inertia
+        return alpha
+    else:
+        return "error"
 
 
 # √√ next time can return the value instead of a string
