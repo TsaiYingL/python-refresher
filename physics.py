@@ -3,6 +3,7 @@ in water. It also tells us if the object will float on water"""
 
 # adding values
 import numpy as np
+import matplotlib.pyplot as plt
 
 density_fluid = 1000
 g = 9.81
@@ -124,7 +125,11 @@ def calculate_auv2_acceleration(
                 [np.sin(alpha), -np.sin(alpha), -np.sin(alpha), np.sin(alpha)],
             ]
         )
-        robot_force = np.sum(trig * T, axis=1)
+        rotational_matrix = np.array(
+            [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
+        )
+        acceleration = np.matmul(np.matmul(trig, T), rotational_matrix)
+        """robot_force = np.sum(trig * T, axis=1)
         force = np.sum(
             np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
             * robot_force,
@@ -133,7 +138,8 @@ def calculate_auv2_acceleration(
         acceleration = force / mass
         acceleration_x = round(acceleration[0], 10)
         acceleration_y = round(acceleration[1], 10)
-        return (acceleration_x, acceleration_y)
+        return (acceleration_x, acceleration_y)"""
+        return acceleration
     else:
         return "error"
 
@@ -156,18 +162,64 @@ def calculate_auv2_angular_acceleration(
                 -l * np.cos(alpha) + L * np.sin(alpha),
             ]
         )
-        torque = np.sum(trig * T)
-        alpha = round(torque / inertia, 10)
+        torque = np.matmul(trig, T)
+        alpha = torque / inertia
         return alpha
     else:
-        return "error"
+        return ValueError("error")
 
 
 # np.array([1,-1,1,-1]) is a 4x1 matrix; np.array([1,-1,1,-1]).T (transpose) is a 1x4 matrix
 
 
+def simulate_auv2_motion(
+    T: np.ndarray,
+    alpha,
+    L,
+    l,
+    mass=100,
+    inertia=100,
+    dt=0.1,
+    t_final=10,
+    x0=0,
+    y0=0,
+    theta0=0,
+):
+    t = np.arange(0, t_final, dt)
+    x = np.zeros_like(t)
+    y = np.zeros_like(t)
+    theta = np.zeros_like(t)
+    v_x = np.zeros_like(t)
+    v_y = np.zeros_like(t)
+    omega = np.zeros_like(t)
+    a_x = np.zeros_like(t)
+    a_y = np.zeros_like(t)
+    for i in range(1, len(t)):
+        angular_acceleration = calculate_auv2_angular_acceleration(
+            T, alpha, L, l, inertia
+        )
+        omega[i] = angular_acceleration * dt + omega[i - 1]
+        theta[i] = omega[i - 1] * dt + theta[i - 1]
+        a_x[i] = float(calculate_auv2_acceleration(T, alpha, theta[i - 1], mass)[0])
+        a_y[i] = float(calculate_auv2_acceleration(T, alpha, theta[i - 1], mass)[1])
+        v_x[i] = a_x[i - 1] * dt + v_x[i - 1]
+        v_y[i] = a_y[i - 1] * dt + v_y[i - 1]
+        x[i] = v_x[i - 1] * dt + x[i - 1]
+        y[i] = v_y[i - 1] * dt + y[i - 1]
+
+
 if __name__ == "__main__":
     print(
+        calculate_auv2_acceleration(
+            np.array([100, 100, 100, 100]), np.pi / 3, np.pi / 6
+        )[0],
+        type(
+            calculate_auv2_acceleration(
+                np.array([100, 100, 100, 100]), np.pi / 3, np.pi / 6
+            )[0]
+        ),
+    )
+    """print(
         calculate_auv2_angular_acceleration(
             np.array([200, 200, 100, 100]), np.pi / 3, 100, 50
         )
@@ -178,7 +230,9 @@ if __name__ == "__main__":
     print(100 * (-100 * (np.sin(np.pi / 3)) + 50 * (np.cos(np.pi / 3))))
     print(np.cos(np.pi / 3))
 
-    print(calculate_auv_acceleration(10, np.pi / 2), (0, 0.1))
+    print(calculate_auv_acceleration(10, np.pi / 2), (0, 0.1))"""
+    simulate_auv2_motion(np.array([100, 100, 100, 100]), np.pi / 3, 100, 50)
+
 
 # √√ next time can return the value instead of a string
 # √√ don't need to make a class sine the question specified to make a function

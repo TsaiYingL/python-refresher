@@ -64,7 +64,7 @@ class TestPhysics(unittest.TestCase):
             physics.calculate_auv2_acceleration(
                 np.array([100, 100, 100, 100]), np.pi / 3, np.pi / 6
             ),
-            (0, 0),
+            np.array([0.0,0.0]),
         )
         self.assertEqual(
             physics.calculate_auv2_acceleration(
