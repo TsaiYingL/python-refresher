@@ -47,7 +47,7 @@ def calculate_acceleration(F: int or float, m: int or float):
         return "error"
 
 
-# find angular acceleration
+# calculates the angular acceleration
 def calculate_angular_acceleration(tau, I):
     if I >= 0:
         angular_acceleration = tau / I
@@ -56,6 +56,7 @@ def calculate_angular_acceleration(tau, I):
         return "error"
 
 
+# calculates the torque
 def calculate_torque(F_magnitude, F_direction, r):
     if r > 0:
         F_direction *= np.pi / 180
@@ -65,6 +66,7 @@ def calculate_torque(F_magnitude, F_direction, r):
         return "error"
 
 
+# calculates the moment of inertia
 def calculate_moment_of_inertia(m, r):
     if m >= 0 and r > 0:
         moment_of_inertia = m * (r**2)
@@ -73,7 +75,7 @@ def calculate_moment_of_inertia(m, r):
         return "error"
 
 
-# calculate the acceleration of AUV
+# calculate the acceleration of AUV (with 1 thruster)
 def calculate_auv_acceleration(
     F_magnitude, F_angle, mass=100, volume=0.1, thruster_distance=0.5
 ):
@@ -83,7 +85,7 @@ def calculate_auv_acceleration(
         return (acceleration_x, acceleration_y)
 
 
-# calculate the angular acceleration of AUV
+# calculate the angular acceleration of AUV (with 1 thruster)
 def calculate_auv_angular_acceleration(
     F_magnitude, F_angle, inertia=1, thruster_distance=0.5
 ):
@@ -93,13 +95,39 @@ def calculate_auv_angular_acceleration(
         return angular_acceleration
 
 
+# calculate the acceleration of AUV (with 4 thrusters)
 def calculate_auv2_acceleration(
     T: np.ndarray, alpha: int or float, theta: int or float, mass=100
 ):
-    x_axis = np.array([np.cos(alpha), np.cos(alpha), -np.cos(alpha), -np.cos(alpha)])
-    y_axis = np.array
-    acceleration_x = 0
-    acceleration_y = 0
+    trig = np.array(
+        [
+            [np.cos(alpha), np.cos(alpha), -np.cos(alpha), -np.cos(alpha)],
+            [np.sin(alpha), -np.sin(alpha), -np.sin(alpha), np.sin(alpha)],
+        ]
+    )
+    robot_force = np.sum(trig * T, axis=1)
+    force = np.sum(
+        np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
+        * robot_force,
+        axis=1,
+    )
+    acceleration = force / mass
+    return acceleration
+
+
+# calculate the angular acceleration of the AUV (with 4 thrusters)
+def calculate_auv2_angular_acceleration(T: np.ndarray, alpha, L, l, inertia=100):
+    trig = np.array(
+        [
+            l * np.cos(alpha) + L * np.sin(alpha),
+            l * np.cos(alpha) - L * np.sin(alpha),
+            -l * np.cos(alpha) - L * np.sin(alpha),
+            -l * np.cos(alpha) + L * np.sin(alpha),
+        ]
+    )
+    torque = np.sum(trig * T)
+    alpha = torque / inertia
+    return alpha
 
     acceleration_x = acceleration_x / mass
     acceleration_y = acceleration_y / mass
