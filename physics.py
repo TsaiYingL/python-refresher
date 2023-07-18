@@ -114,7 +114,7 @@ def calculate_auv_angular_acceleration(
 # use the function that is being defined before
 
 
-# calculate the acceleration of AUV (with 4 thrusters)
+# problem 8: calculate the acceleration of AUV (with 4 thrusters)
 def calculate_auv2_acceleration(
     T: np.ndarray, alpha: int or float, theta: int or float, mass=100
 ):
@@ -128,20 +128,10 @@ def calculate_auv2_acceleration(
         rotational_matrix = np.array(
             [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
         )
-        acceleration = np.matmul(np.matmul(trig, T), rotational_matrix)
-        """robot_force = np.sum(trig * T, axis=1)
-        force = np.sum(
-            np.array([[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]])
-            * robot_force,
-            axis=1,
-        )
-        acceleration = force / mass
-        acceleration_x = round(acceleration[0], 10)
-        acceleration_y = round(acceleration[1], 10)
-        return (acceleration_x, acceleration_y)"""
+        acceleration = np.matmul(rotational_matrix, np.matmul(trig, T)) / mass
         return acceleration
     else:
-        return "error"
+        raise ValueError("error")
 
 
 # try to use np.matmul
@@ -172,6 +162,7 @@ def calculate_auv2_angular_acceleration(
 # np.array([1,-1,1,-1]) is a 4x1 matrix; np.array([1,-1,1,-1]).T (transpose) is a 1x4 matrix
 
 
+# problem 10
 def simulate_auv2_motion(
     T: np.ndarray,
     alpha,
@@ -206,17 +197,29 @@ def simulate_auv2_motion(
         v_y[i] = a_y[i - 1] * dt + v_y[i - 1]
         x[i] = v_x[i - 1] * dt + x[i - 1]
         y[i] = v_y[i - 1] * dt + y[i - 1]
+        pass
+    plt.plot(t, x, label="x")
+    plt.plot(t, y, label="y")
+    plt.plot(t, v_x, label="v_x")
+    plt.plot(t, v_y, label="v_y")
+    plt.plot(t, a_x, label="a_x")
+    plt.plot(t, a_y, label="a_y")
+    plt.plot(t, theta, label="theta")
+    plt.plot(t, omega, label="omega")
+    plt.xlabel("Time (s)")
+    plt.ylabel("x, y, v_x, v_y, a_x, a_y, theta, omega")
+    plt.legend()
+    plt.show()
 
 
 if __name__ == "__main__":
     print(
-        calculate_auv2_acceleration(
-            np.array([100, 100, 100, 100]), np.pi / 3, np.pi / 6
-        )[0],
+        np.around(
+            calculate_auv2_acceleration(np.array([10, 0, 0, 0]), np.pi / 3, np.pi / 6),
+            10,
+        ),
         type(
-            calculate_auv2_acceleration(
-                np.array([100, 100, 100, 100]), np.pi / 3, np.pi / 6
-            )[0]
+            calculate_auv2_acceleration(np.array([10, 0, 0, 0]), np.pi / 3, np.pi / 6)
         ),
     )
     """print(
@@ -231,7 +234,19 @@ if __name__ == "__main__":
     print(np.cos(np.pi / 3))
 
     print(calculate_auv_acceleration(10, np.pi / 2), (0, 0.1))"""
-    simulate_auv2_motion(np.array([100, 100, 100, 100]), np.pi / 3, 100, 50)
+    simulate_auv2_motion(
+        np.array([10, 0, 0, 0]),
+        np.pi / 3,
+        100,
+        100,
+        100,
+        100,
+        0.1,
+        0.5,
+        0,
+        0,
+        np.pi / 6,
+    )
 
 
 # √√ next time can return the value instead of a string
