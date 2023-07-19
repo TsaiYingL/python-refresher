@@ -198,18 +198,6 @@ def simulate_auv2_motion(
         x[i] = v_x[i - 1] * dt + x[i - 1]
         y[i] = v_y[i - 1] * dt + y[i - 1]
         pass
-    plt.plot(t, x, label="x")
-    plt.plot(t, y, label="y")
-    plt.plot(t, v_x, label="v_x")
-    plt.plot(t, v_y, label="v_y")
-    plt.plot(t, a_x, label="a_x")
-    plt.plot(t, a_y, label="a_y")
-    plt.plot(t, theta, label="theta")
-    plt.plot(t, omega, label="omega")
-    plt.xlabel("Time (s)")
-    plt.ylabel("x, y, v_x, v_y, a_x, a_y, theta, omega")
-    plt.legend()
-    plt.show()
 
 
 if __name__ == "__main__":
